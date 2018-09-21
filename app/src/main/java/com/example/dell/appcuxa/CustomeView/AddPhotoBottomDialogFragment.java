@@ -146,7 +146,7 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
                 Uri imageUri = data.getData();
                 imagePath = getRealPathFromURI_API19(getContext(), imageUri);
                 List<MultipartBody.Part> parts = new ArrayList<>();
-                parts.add(prepareFilePart("image", imageUri));
+                parts.add(prepareFilePart("images", imageUri));
                 //
                 MultipartBody.Part[] parts1 = new MultipartBody.Part[parts.size()];
                 parts.toArray(parts1);

@@ -15,7 +15,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkController {
     private static volatile CuXaAPI cuXaAPI;
-    public static final String BASE_URL = "https://cx.emmasoft.com.vn/api/";
+   public static final String BASE_URL = "https://cx.emmasoft.com.vn/api/";
+   // public static final String BASE_URL = "http://192.168.1.112:8080/api/";
+
     //public static final String BASE_AUTH_URL = "https://cx.emmasoft.com.vn/api/auth/";
 
     private static Retrofit retrofit = null;

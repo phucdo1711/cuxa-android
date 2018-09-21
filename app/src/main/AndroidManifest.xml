@@ -28,14 +28,14 @@
             android:value="@string/facebook_app_id" />
 
         <activity android:name=".Login.LoginView.MainActivity" android:screenOrientation="portrait" >
-
-        </activity>
-        <activity android:name=".MainPage.MainPageViews.MainPageActivity" android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".MainPage.MainPageViews.MainPageActivity" android:screenOrientation="portrait" >
+
         </activity>
     </application>
 
