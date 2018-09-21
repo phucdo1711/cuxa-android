@@ -98,6 +98,12 @@ public class FragmentSearQuickAdva extends DialogFragment implements View.OnClic
             case R.id.imgBack:
                 FragmentSearQuickAdva.this.dismiss();
                 break;
+            case R.id.btnSearchAdvance:
+                FragmentSearchAdvance fragment= new FragmentSearchAdvance();
+                //fragmentSearQuickAdva.setCancelable(false);
+                fragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogFragmentTheme);
+                fragment.show(getFragmentManager(),"fragment_search_advance");
+                break;
         }
     }
      private void geoLocate() {
@@ -119,6 +125,7 @@ public class FragmentSearQuickAdva extends DialogFragment implements View.OnClic
         imgBack = mMainView.findViewById(R.id.imgBack);
         edtSearchContent = mMainView.findViewById(R.id.edtSearch);
         btnAdvance = mMainView.findViewById(R.id.btnSearchAdvance);
+        btnAdvance.setOnClickListener(this);
         rgLocation = mMainView.findViewById(R.id.rgLocation);
         rcHint = mMainView.findViewById(R.id.recHint);
         rcHistory = mMainView.findViewById(R.id.recHistory);

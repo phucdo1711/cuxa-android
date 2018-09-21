@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -14,20 +12,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.example.dell.appcuxa.Login.LoginView.MainActivity;
 import com.example.dell.appcuxa.MainPage.Adapter.ViewPagerAdapter;
-import com.example.dell.appcuxa.ObjectModels.UserModel;
-import com.example.dell.appcuxa.ObjectModels.UserObject;
+import com.example.dell.appcuxa.MainPage.MainPageViews.MessTab.MessView.FragmentMess;
+import com.example.dell.appcuxa.MainPage.MainPageViews.NotiTab.NotiView.FragmentNotification;
+import com.example.dell.appcuxa.MainPage.MainPageViews.ProfileTab.ProfileView.FragmentProfile;
+import com.example.dell.appcuxa.MainPage.MainPageViews.SavedTab.SavedView.FragmentSaved;
 import com.example.dell.appcuxa.R;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainPageActivity extends AppCompatActivity implements View.OnClickListener{
     FragmentSaved fragmentSaved;
@@ -117,19 +112,16 @@ public class MainPageActivity extends AppCompatActivity implements View.OnClickL
 
         setupViewPager(viewPager);
 
-        Intent intent = getIntent();
-        UserModel userModel = (UserModel) intent.getSerializableExtra("login_user");
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         String saveToken = sharedPreferences.getString("token","");
-        /*if(saveToken.equals("")){
+        if(saveToken.equals("")){
             Intent intent = new Intent(MainPageActivity.this, MainActivity.class);
             startActivity(intent);
-        }*/
+        }
     }
 
     @Override

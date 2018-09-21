@@ -38,6 +38,7 @@ dependencies {
     compile 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
     compile "com.android.support:design:26.+"
     // Retrofit
+    implementation 'andhradroid.dev:aFilechooser:1.0.1'
     compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
     implementation 'com.github.santalu:auto-viewpager:1.0.5'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'

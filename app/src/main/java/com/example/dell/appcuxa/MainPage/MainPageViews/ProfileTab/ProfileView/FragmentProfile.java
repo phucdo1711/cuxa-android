@@ -1,4 +1,4 @@
-package com.example.dell.appcuxa.MainPage.MainPageViews;
+package com.example.dell.appcuxa.MainPage.MainPageViews.ProfileTab.ProfileView;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

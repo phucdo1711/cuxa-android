@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -31,6 +32,7 @@ import com.example.dell.appcuxa.FileInfo;
 import com.example.dell.appcuxa.MainPage.MainPageViews.FragmentUpRoom;
 import com.example.dell.appcuxa.R;
 import com.example.dell.appcuxa.Utils.AppUtils;
+import com.ipaulpro.afilechooser.utils.FileUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -48,6 +50,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.http.Multipart;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -63,8 +66,9 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
     File[] files;
     SharedPreferences.Editor editor;
     String token;
-    String imagePath ="";
+    String imagePath = "";
     OnChooseReasonListener listener;
+
     public static AddPhotoBottomDialogFragment newInstance() {
         return new AddPhotoBottomDialogFragment();
     }
@@ -89,14 +93,14 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
         tvCamera.setOnClickListener(this);
         tvGallery.setOnClickListener(this);
         tvTrash.setOnClickListener(this);
-        sharedPreferences = getActivity().getSharedPreferences("login_data",MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences("login_data", MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        token = sharedPreferences.getString("token","");
+        token = sharedPreferences.getString("token", "");
 
         fileService = NetworkController.upload();
         Bundle bundle = getArguments();
-        if(bundle!=null){
-            position = bundle.getInt("pos",-1);
+        if (bundle != null) {
+            position = bundle.getInt("pos", -1);
         }
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -118,28 +122,50 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
                 break;
         }
     }
-    public void intentCamera(){
+
+    public void intentCamera() {
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, CAMERA);
     }
-    public void intentGetImage(){
+
+    public void intentGetImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY);
     }
+
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if(data!=null){
-            if(requestCode==CAMERA){
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null) {
+            if (requestCode == CAMERA) {
                 Bitmap photo = (Bitmap) data.getExtras().get("data");
                 sendBackImage(photo);
-            }else if(requestCode==GALLERY){
+            } else if (requestCode == GALLERY) {
                 Uri imageUri = data.getData();
-                imagePath = getRealPathFromURI_API19(getContext(),imageUri);
-                File file = new File(imagePath);
+                imagePath = getRealPathFromURI_API19(getContext(), imageUri);
+                List<MultipartBody.Part> parts = new ArrayList<>();
+                parts.add(prepareFilePart("image", imageUri));
+                //
+                MultipartBody.Part[] parts1 = new MultipartBody.Part[parts.size()];
+                parts.toArray(parts1);
+                Call<ResponseBody> call = fileService.postImage("Bearer " + token, parts1);
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful()) {
+                            Log.d("hihhh", response.toString());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.d("hihhh", "failure");
+                    }
+                });
+                //
+              /*  File file = new File(imagePath);
                 fileList.add(file);
                 String[] simpleArray = new String[ fileList.size() ];
                 fileList.toArray( simpleArray );
@@ -159,7 +185,7 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
                     public void onFailure(Call<List<FileInfo>> call, Throwable t) {
                         Toast.makeText(getActivity(), "failure", Toast.LENGTH_SHORT).show();
                     }
-                });
+                });*/
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), imageUri);
                     sendBackImage(bitmap);
@@ -170,41 +196,51 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
         }
 
     }
-    public void setOnChooseReasonListener(OnChooseReasonListener listener){
+
+    public void setOnChooseReasonListener(OnChooseReasonListener listener) {
         this.listener = listener;
     }
-    public void sendBackImage(Bitmap data){
+
+    public void sendBackImage(Bitmap data) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         data.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byteArray = stream.toByteArray();
-        listener.onChooseReason(byteArray,position);
+        listener.onChooseReason(byteArray, position);
         dismiss();
     }
-    private String getRealPathFromUri(Uri uri){
-        String[] projectyiom = {MediaStore.Images.Media.DATA};
-        CursorLoader loader = new CursorLoader(getActivity(),uri,projectyiom,null,null,null);
-        Cursor cursor = loader.loadInBackground();
-        int column_idx = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String result = cursor.getString(column_idx);
-        cursor.close();
-        return  result;
+
+    @NonNull
+    private MultipartBody.Part prepareFilePart(String partName, Uri fileUri) {
+        // https://github.com/iPaulPro/aFileChooser/blob/master/aFileChooser/src/com/ipaulpro/afilechooser/utils/FileUtils.java
+        // use the FileUtils to get the actual file by uri
+        File file = FileUtils.getFile(getContext(), fileUri);
+
+        // create RequestBody instance from file
+        RequestBody requestFile =
+                RequestBody.create(
+                        MediaType.parse(getActivity().getContentResolver().getType(fileUri)),
+                        file
+                );
+
+        // MultipartBody.Part is used to send also the actual file name
+        return MultipartBody.Part.createFormData(partName, file.getName(), requestFile);
     }
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public static String getRealPathFromURI_API19(Context context, Uri uri){
+    public static String getRealPathFromURI_API19(Context context, Uri uri) {
         String filePath = "";
         String wholeID = DocumentsContract.getDocumentId(uri);
 
         // Split at colon, use second item in the array
         String id = wholeID.split(":")[1];
 
-        String[] column = { MediaStore.Images.Media.DATA };
+        String[] column = {MediaStore.Images.Media.DATA};
 
         // where id is equal to
         String sel = MediaStore.Images.Media._ID + "=?";
 
         Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                column, sel, new String[]{ id }, null);
+                column, sel, new String[]{id}, null);
 
         int columnIndex = cursor.getColumnIndex(column[0]);
 
