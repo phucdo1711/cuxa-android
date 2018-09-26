@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_dangphong"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:id="@+id/layout_dangphong"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -48,58 +50,60 @@
 
             <com.example.dell.appcuxa.CustomeView.RobBoldText
                 android:layout_width="match_parent"
-                android:gravity="center"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="Thông tin phòng"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
+
             <LinearLayout
-                android:gravity="center"
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
                 android:orientation="horizontal"
                 android:weightSum="9">
 
                 <com.example.dell.appcuxa.CustomeView.RobCheckBox
+                    android:id="@+id/cbRent"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="4"
-                    android:paddingLeft="10dp"
-                    android:padding="10dp"
-                    android:id="@+id/cbRent"
-                    android:button="@android:color/transparent"
                     android:background="@drawable/bg_radio"
+                    android:button="@android:color/transparent"
                     android:drawableRight="@drawable/ic_house"
+                    android:padding="10dp"
+                    android:paddingLeft="10dp"
                     android:text="Cho thuê"
                     android:textColor="@drawable/change_color_checkbox" />
 
                 <com.example.dell.appcuxa.CustomeView.RobCheckBox
+                    android:id="@+id/cbLiveTogether"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_weight="4"
-                    android:id="@+id/cbLiveTogether"
-                    android:paddingLeft="10dp"
-                    android:padding="10dp"
-                    android:button="@android:color/transparent"
                     android:background="@drawable/bg_radio"
+                    android:button="@android:color/transparent"
                     android:drawableRight="@drawable/ic_laugh"
+                    android:padding="10dp"
+                    android:paddingLeft="10dp"
                     android:text="Ở ghép"
                     android:textColor="@drawable/change_color_checkbox" />
 
             </LinearLayout>
+
             <com.example.dell.appcuxa.CustomeView.RobBoldText
-                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:text="Tên phòng"
                 android:textColor="@color/black" />
 
             <com.example.dell.appcuxa.CustomeView.RobEditText
-                android:layout_width="match_parent"
                 android:id="@+id/edtRoomName"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Vui lòng điền vào đây"
                 android:textSize="14sp" />
@@ -116,12 +120,12 @@
                 android:weightSum="10">
 
                 <com.example.dell.appcuxa.CustomeView.RobEditText
-                    android:layout_width="0dp"
-                    android:inputType="number"
                     android:id="@+id/edtPrice"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
                     android:hint="Vui lòng điền vào đây"
+                    android:inputType="number"
                     android:textSize="14sp" />
 
                 <com.example.dell.appcuxa.CustomeView.RobEditText
@@ -146,12 +150,12 @@
                 android:weightSum="10">
 
                 <com.example.dell.appcuxa.CustomeView.RobEditText
-                    android:layout_width="0dp"
-                    android:inputType="number"
                     android:id="@+id/edtDienTich"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
                     android:hint="Vui lòng điền vào đây"
+                    android:inputType="number"
                     android:textSize="14sp" />
 
                 <com.example.dell.appcuxa.CustomeView.RobEditText
@@ -175,43 +179,16 @@
                 android:layout_height="wrap_content"
                 android:weightSum="9">
 
-                <com.example.dell.appcuxa.CustomeView.RobEditText
-                    android:layout_width="0dp"
+                <com.example.dell.appcuxa.CustomeView.RobAutoCompleteTextView
+                    android:textSize="13sp"
+                    android:imeOptions="actionDone"
+                    android:id="@+id/edtSearch"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:id="@+id/edtTinh"
-                    android:drawablePadding="5dp"
-                    android:focusable="false"                    android:drawableRight="@drawable/ic_down_arrow"
-                    android:hint="Tỉnh/thành"
-                    android:textSize="14sp" />
-
-                <com.example.dell.appcuxa.CustomeView.RobEditText
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:drawablePadding="5dp"
-                    android:id="@+id/edtHuyen"
-                    android:focusable="false"                    android:drawableRight="@drawable/ic_down_arrow"
-                    android:hint="Quận/huyện"
-                    android:textSize="14sp" />
-
-                <com.example.dell.appcuxa.CustomeView.RobEditText
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:drawablePadding="5dp"
-                    android:id="@+id/edtXa"
-                    android:focusable="false"                    android:drawableRight="@drawable/ic_down_arrow"
-                    android:hint="Phường/xá"
-                    android:textSize="14sp" />
+                    android:backgroundTint="@color/black"
+                    android:hint="Gõ để bắt đầu tìm kiếm"
+                    android:textColorHint="#939393" />
             </LinearLayout>
-
-            <com.example.dell.appcuxa.CustomeView.RobEditText
-                android:id="@+id/edtAddressMoreDetail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Nhập địa chỉ chi tiết(Số nhà, tên đường)*"
-                android:textSize="14sp" />
 
             <com.example.dell.appcuxa.CustomeView.RobBoldText
                 android:layout_width="match_parent"
@@ -220,11 +197,11 @@
                 android:textColor="@color/black" />
 
             <com.example.dell.appcuxa.CustomeView.RobEditText
-                android:layout_width="match_parent"
                 android:id="@+id/edtPhoneNo"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="phone"
                 android:hint="Vui lòng điền vào đây"
+                android:inputType="phone"
                 android:textSize="14sp" />
 
             <LinearLayout
@@ -246,11 +223,11 @@
                         android:textColor="@color/black" />
 
                     <com.example.dell.appcuxa.CustomeView.RobEditText
+                        android:id="@+id/edtNumOfPpl"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
                         android:hint="Số người"
-                        android:id="@+id/edtNumOfPpl"
+                        android:inputType="number"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -267,12 +244,12 @@
                         android:textColor="@color/black" />
 
                     <com.example.dell.appcuxa.CustomeView.RobEditText
+                        android:id="@+id/edtGender"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="10dp"
-                        android:focusable="false"
-                        android:id="@+id/edtGender"
                         android:drawableRight="@drawable/ic_down_arrow"
+                        android:focusable="false"
                         android:hint="Giới tính"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -286,51 +263,51 @@
                 android:textColor="@color/black" />
 
             <LinearLayout
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal"
                 android:weightSum="9">
 
                 <com.example.dell.appcuxa.CustomeView.RobCheckBox
-                    android:layout_width="0dp"
                     android:id="@+id/cbAirConditioner"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="3"
-                    android:paddingLeft="10dp"
-                    android:padding="10dp"
-                    android:button="@android:color/transparent"
                     android:background="@drawable/bg_radio"
+                    android:button="@android:color/transparent"
                     android:drawableRight="@drawable/ic_air_conditioner"
+                    android:padding="10dp"
+                    android:paddingLeft="10dp"
                     android:text="Điều hòa"
                     android:textColor="@drawable/change_color_checkbox" />
 
                 <com.example.dell.appcuxa.CustomeView.RobCheckBox
+                    android:id="@+id/cbNetwork"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="3"
-                    android:paddingLeft="10dp"
-                    android:id="@+id/cbNetwork"
-                    android:padding="10dp"
-                    android:button="@android:color/transparent"
                     android:background="@drawable/bg_radio"
+                    android:button="@android:color/transparent"
                     android:drawableRight="@drawable/ic_wifi"
+                    android:padding="10dp"
+                    android:paddingLeft="10dp"
                     android:text="Mạng"
                     android:textColor="@drawable/change_color_checkbox" />
 
                 <com.example.dell.appcuxa.CustomeView.RobCheckBox
-                    android:layout_width="0dp"
                     android:id="@+id/cbParking"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="3"
-                    android:paddingLeft="10dp"
-                    android:padding="10dp"
-                    android:button="@android:color/transparent"
                     android:background="@drawable/bg_radio"
+                    android:button="@android:color/transparent"
                     android:drawableRight="@drawable/ic_garage"
+                    android:padding="10dp"
+                    android:paddingLeft="10dp"
                     android:text="Chỗ để xe"
                     android:textColor="@drawable/change_color_checkbox" />
             </LinearLayout>
@@ -343,44 +320,44 @@
                 android:weightSum="9">
 
                 <com.example.dell.appcuxa.CustomeView.RobCheckBox
+                    android:id="@+id/cbWc"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="3"
-                    android:paddingLeft="10dp"
-                    android:padding="10dp"
-                    android:id="@+id/cbWc"
-                    android:button="@android:color/transparent"
                     android:background="@drawable/bg_radio"
+                    android:button="@android:color/transparent"
                     android:drawableRight="@drawable/ic_toilet"
+                    android:padding="10dp"
+                    android:paddingLeft="10dp"
                     android:text="WC riêng"
                     android:textColor="@drawable/change_color_checkbox" />
 
                 <com.example.dell.appcuxa.CustomeView.RobCheckBox
+                    android:id="@+id/cbDoor"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="3"
-                    android:paddingLeft="10dp"
-                    android:id="@+id/cbDoor"
-                    android:padding="10dp"
-                    android:button="@android:color/transparent"
                     android:background="@drawable/bg_radio"
+                    android:button="@android:color/transparent"
                     android:drawableRight="@drawable/ic_exit_door"
+                    android:padding="10dp"
+                    android:paddingLeft="10dp"
                     android:text="Cửa riêng"
                     android:textColor="@drawable/change_color_checkbox" />
 
                 <com.example.dell.appcuxa.CustomeView.RobCheckBox
+                    android:id="@+id/cbFreeTime"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="3"
-                    android:paddingLeft="10dp"
-                    android:padding="10dp"
-                    android:id="@+id/cbFreeTime"
-                    android:button="@android:color/transparent"
                     android:background="@drawable/bg_radio"
+                    android:button="@android:color/transparent"
                     android:drawableRight="@drawable/ic_time"
+                    android:padding="10dp"
+                    android:paddingLeft="10dp"
                     android:text="Giờ tự do"
                     android:textColor="@drawable/change_color_checkbox" />
             </LinearLayout>
@@ -393,44 +370,44 @@
                 android:weightSum="9">
 
                 <com.example.dell.appcuxa.CustomeView.RobCheckBox
+                    android:id="@+id/cbChef"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="3"
-                    android:paddingLeft="10dp"
-                    android:id="@+id/cbChef"
-                    android:padding="10dp"
-                    android:button="@android:color/transparent"
                     android:background="@drawable/bg_radio"
+                    android:button="@android:color/transparent"
                     android:drawableRight="@drawable/ic_chef"
+                    android:padding="10dp"
+                    android:paddingLeft="10dp"
                     android:text="Bếp"
                     android:textColor="@drawable/change_color_checkbox" />
 
                 <com.example.dell.appcuxa.CustomeView.RobCheckBox
+                    android:id="@+id/cbFrigit"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="3"
-                    android:paddingLeft="10dp"
-                    android:padding="10dp"
-                    android:id="@+id/cbFrigit"
-                    android:button="@android:color/transparent"
                     android:background="@drawable/bg_radio"
+                    android:button="@android:color/transparent"
                     android:drawableRight="@drawable/ic_fridge"
+                    android:padding="10dp"
+                    android:paddingLeft="10dp"
                     android:text="Tủ lạnh"
-                    android:textColor="@drawable/change_color_checkbox"/>
+                    android:textColor="@drawable/change_color_checkbox" />
 
                 <com.example.dell.appcuxa.CustomeView.RobCheckBox
+                    android:id="@+id/cbWashingMachine"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="3"
-                    android:paddingLeft="10dp"
-                    android:padding="10dp"
-                    android:id="@+id/cbWashingMachine"
-                    android:button="@android:color/transparent"
                     android:background="@drawable/bg_radio"
+                    android:button="@android:color/transparent"
                     android:drawableRight="@drawable/ic_exit_door"
+                    android:padding="10dp"
+                    android:paddingLeft="10dp"
                     android:text="Máy giặt"
                     android:textColor="@drawable/change_color_checkbox" />
             </LinearLayout>
@@ -443,230 +420,147 @@
                 android:weightSum="9">
 
                 <com.example.dell.appcuxa.CustomeView.RobCheckBox
+                    android:id="@+id/cbBed"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="3"
-                    android:paddingLeft="10dp"
-                    android:id="@+id/cbBed"
-                    android:padding="10dp"
-                    android:button="@android:color/transparent"
                     android:background="@drawable/bg_radio"
+                    android:button="@android:color/transparent"
                     android:drawableRight="@drawable/ic_slumber"
+                    android:padding="10dp"
+                    android:paddingLeft="10dp"
                     android:text="Giường"
                     android:textColor="@drawable/change_color_checkbox" />
 
                 <com.example.dell.appcuxa.CustomeView.RobCheckBox
+                    android:id="@+id/cbTivi"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="3"
-                    android:paddingLeft="10dp"
-                    android:id="@+id/cbTivi"
-                    android:padding="10dp"
-                    android:button="@android:color/transparent"
                     android:background="@drawable/bg_radio"
+                    android:button="@android:color/transparent"
                     android:drawableRight="@drawable/ic_washing_machine"
+                    android:padding="10dp"
+                    android:paddingLeft="10dp"
                     android:text="Tivi"
                     android:textColor="@drawable/change_color_checkbox" />
 
                 <com.example.dell.appcuxa.CustomeView.RobCheckBox
+                    android:id="@+id/cbPet"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="3"
-                    android:paddingLeft="10dp"
-                    android:padding="10dp"
-                    android:id="@+id/cbPet"
-                    android:button="@android:color/transparent"
                     android:background="@drawable/bg_radio"
+                    android:button="@android:color/transparent"
                     android:drawableRight="@drawable/ic_dog"
+                    android:padding="10dp"
+                    android:paddingLeft="10dp"
                     android:text="Vật nuôi"
                     android:textColor="@drawable/change_color_checkbox" />
             </LinearLayout>
+
             <com.example.dell.appcuxa.CustomeView.RobBoldText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="Ảnh phòng"
                 android:textColor="@color/black" />
+
             <LinearLayout
-                android:orientation="horizontal"
-                android:weightSum="12"
-                android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/img1"
-                    android:src="@drawable/ic_add"
-                    android:gravity="center"
-                    android:adjustViewBounds="true"
-                    android:cropToPadding="true"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content" />
-                <View
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="10dp"/>
-                <ImageView
-                    android:id="@+id/img2"
-                    android:src="@drawable/ic_add"
-                    android:gravity="center"
-                    android:adjustViewBounds="true"
-                    android:cropToPadding="true"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content" />
-                <View
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="10dp"/>
-                <ImageView
-                    android:id="@+id/img3"
-                    android:src="@drawable/ic_add"
-                    android:gravity="center"
-                    android:adjustViewBounds="true"
-                    android:cropToPadding="true"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content" />
-                <View
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="10dp"/>
-                <ImageView
-                    android:id="@+id/img4"
-                    android:src="@drawable/ic_add"
-                    android:gravity="center"
-                    android:adjustViewBounds="true"
-                    android:cropToPadding="true"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content" />
-                <View
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="10dp"/>
-                <ImageView
-                    android:id="@+id/img5"
-                    android:src="@drawable/ic_add"
-                    android:gravity="center"
-                    android:adjustViewBounds="true"
-                    android:cropToPadding="true"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:weightSum="12"
-                android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/img6"
-                    android:src="@drawable/ic_add"
-                    android:gravity="center"
-                    android:adjustViewBounds="true"
-                    android:cropToPadding="true"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content" />
-                <View
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="10dp"/>
-                <ImageView
-                    android:id="@+id/img7"
-                    android:src="@drawable/ic_add"
-                    android:gravity="center"
-                    android:adjustViewBounds="true"
-                    android:cropToPadding="true"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content" />
-                <View
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="10dp"/>
-                <ImageView
-                    android:id="@+id/img8"
-                    android:src="@drawable/ic_add"
-                    android:gravity="center"
-                    android:adjustViewBounds="true"
-                    android:cropToPadding="true"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content" />
-                <View
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="10dp"/>
-                <ImageView
-                    android:id="@+id/img9"
-                    android:src="@drawable/ic_add"
-                    android:gravity="center"
-                    android:adjustViewBounds="true"
-                    android:cropToPadding="true"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content" />
-                <View
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="10dp"/>
-                <ImageView
-                    android:id="@+id/img10"
-                    android:src="@drawable/ic_add"
-                    android:gravity="center"
-                    android:adjustViewBounds="true"
-                    android:cropToPadding="true"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-            <com.example.dell.appcuxa.CustomeView.RobBoldText
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.example.dell.appcuxa.CustomeView.RobButton
+                    android:id="@+id/btnSelectImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_button_up_image"
+                    android:drawablePadding="10dp"
+                    android:drawableRight="@drawable/ic_image"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="Tải ảnh lên"
+                    android:textAllCaps="false"
+                    android:textColor="@color/orange" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/gridOptionsView"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical" >
+
+                    <com.example.dell.appcuxa.CustomeView.MyGridView
+                        android:id="@+id/gridImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:clickable="false"
+                        android:gravity="center"
+                        android:numColumns="3"
+                        android:stretchMode="columnWidth">
+                    </com.example.dell.appcuxa.CustomeView.MyGridView>
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </android.support.v7.widget.RecyclerView>
+
+            </LinearLayout>
+
+            <com.example.dell.appcuxa.CustomeView.RobBoldText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:text="Thêm mô tả"
                 android:textColor="@color/black" />
+
             <com.example.dell.appcuxa.CustomeView.RobEditText
-                android:layout_width="match_parent"
                 android:id="@+id/edtDesc"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Vui lòng điền vào đây"
                 android:textSize="14sp" />
+
             <LinearLayout
-                android:layout_marginBottom="30dp"
-                android:gravity="center"
-                android:layout_marginTop="15dp"
-                android:weightSum="10"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="60dp">
+                android:layout_height="60dp"
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
                 <com.example.dell.appcuxa.CustomeView.RobButton
-                    android:layout_width="0dp"
                     android:id="@+id/btnUpload"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="4"
+                    android:background="@drawable/bg_search_layout"
+                    android:elevation="10dp"
                     android:text="Đăng phòng lên"
                     android:textAllCaps="false"
-                    android:background="@drawable/bg_search_layout"
-                    android:elevation="10dp"
-                    android:layout_weight="4"
-                    android:textStyle="bold"
-                    android:layout_height="40dp" />
+                    android:textStyle="bold" />
+
                 <com.example.dell.appcuxa.CustomeView.RobButton
-                    android:layout_marginLeft="20dp"
-                    android:text="Đặt lại"
                     android:id="@+id/btnReset"
-                    android:textStyle="bold"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_weight="2"
                     android:background="@drawable/bg_search_layout"
                     android:elevation="10dp"
+                    android:text="Đặt lại"
                     android:textAllCaps="false"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="40dp" />
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

@@ -8,11 +8,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+
+import java.io.ByteArrayOutputStream;
 
 public class AppUtils {
     public static final int REQUEST_CAMERA = 11;
@@ -51,6 +56,22 @@ public class AppUtils {
         }
 
         return inSampleSize;
+    }
+    public static Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+    public static Bitmap getScaledBitmap(int maxWidth, Bitmap rotatedBitmap) {
+        try {
+
+            int nh = (int) (rotatedBitmap.getHeight() * (512.0 / rotatedBitmap.getWidth()));
+            return Bitmap.createScaledBitmap(rotatedBitmap, maxWidth, nh, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
@@ -92,6 +113,10 @@ public class AppUtils {
         return haveConnectedWifi || haveConnectedMobile;
     }
 
+    public static boolean existSDCard() {
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+    }
+
     /**
      * Kiểm tra dịch vụ google có trong trạng thái thỏa mãn không?
      * @param context
@@ -112,5 +137,13 @@ public class AppUtils {
             Toast.makeText(context, "We cannot make map requests", Toast.LENGTH_SHORT).show();
         }
         return false;
+    }
+    public static int getImageItemWidth(Activity activity) {
+        int screenWidth = activity.getResources().getDisplayMetrics().widthPixels;
+        int densityDpi = activity.getResources().getDisplayMetrics().densityDpi;
+        int cols = screenWidth / densityDpi;
+        cols = cols < 3 ? 3 : cols;
+        int columnSpace = (int) (2 * activity.getResources().getDisplayMetrics().density);
+        return (screenWidth - columnSpace * (cols - 1)) / cols;
     }
 }

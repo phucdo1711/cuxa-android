@@ -1,13 +1,14 @@
 package com.example.dell.appcuxa.CustomeView;
 
-import android.annotation.SuppressLint;
+import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,8 +18,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.CursorLoader;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,53 +29,67 @@ import android.widget.Toast;
 
 import com.example.dell.appcuxa.CuxaAPI.CuXaAPI;
 import com.example.dell.appcuxa.CuxaAPI.NetworkController;
-import com.example.dell.appcuxa.FileInfo;
+import com.example.dell.appcuxa.Login.LoginView.MainActivity;
+import com.example.dell.appcuxa.MainPage.Adapter.ImageAdapter;
 import com.example.dell.appcuxa.MainPage.MainPageViews.FragmentUpRoom;
+import com.example.dell.appcuxa.MainPage.MainPageViews.ILogicDeleteImage;
+import com.example.dell.appcuxa.MainPage.MainPageViews.SelectedImageAdapter;
+import com.example.dell.appcuxa.ObjectModels.ImageObject;
 import com.example.dell.appcuxa.R;
 import com.example.dell.appcuxa.Utils.AppUtils;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.ipaulpro.afilechooser.utils.FileUtils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import me.iwf.photopicker.PhotoPicker;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.http.Multipart;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
-public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
+public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener{
     public static final int CAMERA = 111;
-    public static final int GALLERY = 112;
     TextView tvCamera, tvGallery, tvTrash;
     public int position = -1;
-    byte[] byteArray;
+    List<Bitmap> lstBitmap = new ArrayList<>();
     CuXaAPI fileService;
+    String re = "";
+    List<ImageObject> lstImageObject = new ArrayList<>();
+
+    List<Uri> uriList = new ArrayList<>();
+    List<byte[]> listByteImage = new ArrayList<>();
     SharedPreferences sharedPreferences;
-    List<File> fileList = new ArrayList<>();
-    File[] files;
     SharedPreferences.Editor editor;
     String token;
-    String imagePath = "";
     OnChooseReasonListener listener;
 
     public static AddPhotoBottomDialogFragment newInstance() {
         return new AddPhotoBottomDialogFragment();
     }
 
+
+
+
     public interface OnChooseReasonListener {
-        void onChooseReason(byte[] bytes, int pos);
+        void onChooseReason(List<byte[]> bytes, int pos);
     }
 
     @Nullable
@@ -100,7 +115,7 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
         fileService = NetworkController.upload();
         Bundle bundle = getArguments();
         if (bundle != null) {
-            position = bundle.getInt("pos", -1);
+            position = bundle.getInt("pos", 0);
         }
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -113,10 +128,18 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvCamera:
-                intentCamera();
+                if(position>=10){
+                    Toast.makeText(getActivity(), "Max 10 ảnh, đéo cho chọn :))", Toast.LENGTH_SHORT).show();
+                }else {
+                    intentCamera();
+                }
                 break;
             case R.id.tvGallery:
-                intentGetImage();
+                if(position>=10){
+                    Toast.makeText(getActivity(), "Max 10 ảnh, đéo cho chọn :))", Toast.LENGTH_SHORT).show();
+                }else {
+                    intentGetImage();
+                }
                 break;
             case R.id.tvTrash:
                 break;
@@ -129,25 +152,27 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
     }
 
     public void intentGetImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY);
+        PhotoPicker.builder()
+                .setPhotoCount(10 - position)
+                .setShowCamera(true)
+                .setShowGif(true)
+                .setPreviewEnabled(false)
+                .start(getActivity(), PhotoPicker.REQUEST_CODE);
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(final int requestCode, final int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
         if (data != null) {
             if (requestCode == CAMERA) {
                 Bitmap photo = (Bitmap) data.getExtras().get("data");
-                sendBackImage(photo);
-            } else if (requestCode == GALLERY) {
-                Uri imageUri = data.getData();
-                imagePath = getRealPathFromURI_API19(getContext(), imageUri);
+                lstBitmap.add(photo);
+                sendBackImage(lstBitmap);
+                Uri imageUri = getImageUri(getContext(),photo);
                 List<MultipartBody.Part> parts = new ArrayList<>();
+
                 parts.add(prepareFilePart("images", imageUri));
-                //
                 MultipartBody.Part[] parts1 = new MultipartBody.Part[parts.size()];
                 parts.toArray(parts1);
                 Call<ResponseBody> call = fileService.postImage("Bearer " + token, parts1);
@@ -155,44 +180,74 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (response.isSuccessful()) {
-                            Log.d("hihhh", response.toString());
+                            JSONArray jArray = null;
+                            try {
+                                jArray = new JSONArray(response.body().string());
+                                for (int i = 0; i < jArray.length(); i++) {
+                                    JSONObject object = jArray.optJSONObject(i);
+                                    FragmentUpRoom.imageHinhId.add(object.getString("id"));
+                                }
+                                Log.d("hihhh", response.toString());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
-
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         Log.d("hihhh", "failure");
                     }
                 });
-                //
-              /*  File file = new File(imagePath);
-                fileList.add(file);
-                String[] simpleArray = new String[ fileList.size() ];
-                fileList.toArray( simpleArray );
-                RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"),simpleArray);
-                MultipartBody.Part body = MultipartBody.Part.createFormData("file",file.getName(),requestBody);
-                Call<List<FileInfo>> call= fileService.postImage(body,"Bearer "+token);
-                call.enqueue(new Callback<List<FileInfo>>() {
+            } else if (requestCode ==  PhotoPicker.REQUEST_CODE) {
+                Log.d("dataa",data.toString());
+                ArrayList<String> photos =
+                        data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+                Log.d("photosize",photos.size()+"");
+                for(int i = 0;i<photos.size();i++){
+                    File f = new File(photos.get(i));
+                    Bitmap d = new BitmapDrawable(getActivity().getResources(), f.getAbsolutePath()).getBitmap();
+                    Bitmap scaled = AppUtils.getScaledBitmap(512, d);
+                    uriList.add(getImageUri(getContext(),scaled));
+                    lstBitmap.add(scaled);
+                }
+                List<MultipartBody.Part> parts = new ArrayList<>();
+                for(int i = 0;i<uriList.size();i++){
+                    parts.add(prepareFilePart("images", uriList.get(i)));
+                }
+                MultipartBody.Part[] parts1 = new MultipartBody.Part[parts.size()];
+                parts.toArray(parts1);
+                Call<ResponseBody> call = fileService.postImage("Bearer " + token, parts1);
+                call.enqueue(new Callback<ResponseBody>() {
                     @Override
-                    public void onResponse(Call<List<FileInfo>> call, Response<List<FileInfo>> response) {
-                        if(response.isSuccessful()){
-                            Log.d("hihi",response.toString());
-                            Toast.makeText(getActivity(), "sucessful", Toast.LENGTH_SHORT).show();
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful()) {
+                          /* String  a = "[{\"id\":\"5baa6e9bd17a1e4453d5673a\",\"src\":\"http://haihoa.emmasoft.com.vn:9000/cuxa/5ba2df77d07ed52ff0d8e60b/images-1537896091152.jpeg\"}" +
+                                   ",{\"id\":\"5baa6e9bd17a1e4453d56739\",\"src\":\"http://haihoa.emmasoft.com.vn:9000/cuxa/5ba2df77d07ed52ff0d8e60b/images-1537896091152.jpeg\"}]";*/
+                            try {
+                                JSONArray jArray = new JSONArray(response.body().string());
+                                for (int i = 0; i < jArray.length(); i++) {
+                                    JSONObject object = jArray.optJSONObject(i);
+                                    lstImageObject.add(new ImageObject(object.getString("id"),object.getString("src")));
+                                    FragmentUpRoom.imageHinhId.add(object.getString("id"));
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
-
                     @Override
-                    public void onFailure(Call<List<FileInfo>> call, Throwable t) {
-                        Toast.makeText(getActivity(), "failure", Toast.LENGTH_SHORT).show();
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.d("onFailure uploadImage", "failure");
                     }
-                });*/
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), imageUri);
-                    sendBackImage(bitmap);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                });
+                sendBackImage(lstBitmap);
             }
+        }else{
+            Log.d("dattaaa","null");
         }
 
     }
@@ -201,11 +256,15 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
         this.listener = listener;
     }
 
-    public void sendBackImage(Bitmap data) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        data.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byteArray = stream.toByteArray();
-        listener.onChooseReason(byteArray, position);
+    public void sendBackImage(List<Bitmap> data) {
+        for(int i = 0;i<data.size();i++){
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            data.get(i).compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            listByteImage.add(byteArray);
+        }
+
+        listener.onChooseReason(listByteImage, position);
         dismiss();
     }
 
@@ -217,10 +276,7 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
 
         // create RequestBody instance from file
         RequestBody requestFile =
-                RequestBody.create(
-                        MediaType.parse(getActivity().getContentResolver().getType(fileUri)),
-                        file
-                );
+                RequestBody.create(MediaType.parse(getActivity().getContentResolver().getType(fileUri)), file);
 
         // MultipartBody.Part is used to send also the actual file name
         return MultipartBody.Part.createFormData(partName, file.getName(), requestFile);
@@ -249,5 +305,11 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
         }
         cursor.close();
         return filePath;
+    }
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
     }
 }
