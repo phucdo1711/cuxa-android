@@ -71,8 +71,6 @@ public class FragmentUpRoom extends DialogFragment implements ILogicDeleteImage,
     private View mMainView;
     @BindView(R.id.btnUpRoom)
     public RobButton btnUpload;
-    @BindView(R.id.btnReset)
-    public RobButton btnReset;
     @BindView(R.id.btnSelectImage)
     public RobButton btnSelectImage;
     @BindView(R.id.edtRoomName)
@@ -182,8 +180,6 @@ public class FragmentUpRoom extends DialogFragment implements ILogicDeleteImage,
                 FragmentUpRoom.this.dismiss();
                 break;
             case R.id.btnUpRoom:
-                break;
-            case R.id.btnReset:
                 break;
             case R.id.btnSelectImage:
                 showBottomDialog(AppUtils.PICK_IMAGE_1);

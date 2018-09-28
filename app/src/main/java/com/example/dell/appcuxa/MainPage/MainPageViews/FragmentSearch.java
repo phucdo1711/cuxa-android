@@ -70,21 +70,6 @@ public class FragmentSearch extends FragmentCommon{
         sharedPreferences = getActivity().getSharedPreferences("login_data", MODE_PRIVATE);
         token = sharedPreferences.getString("token", "");
         getListTop();
-       /* List<RoomInfo> roomInfos = new ArrayList<>();
-        RoomInfo info1 = new RoomInfo("https://cdn.homedit.com/wp-content/uploads/2011/05/kids-room-design3.jpg","Cho thuê phòng rộng 100m2","6tr2/phòng","Nguyễn Trãi, quận Thanh Xuân, Hà Nội","Tìm người thuê trọ");
-        RoomInfo info2 = new RoomInfo("http://marceladick.com/wp-content/uploads/2016/01/beautiful-dining-rooms-awesome-with-picture-of-beautiful-dining-property-new-at-ideas.jpg","Cho thuê phòng rộng 100m2","6tr2/phòng","Nguyễn Trãi, quận Thanh Xuân, Hà Nội","Tìm người ở ghép");
-        RoomInfo info3 = new RoomInfo("https://nhadepso.com/wp-content/uploads/2017/06/phong-khach-dep-den-kho-ta-nho-vao-thiet-ke-tuong-gach-doc-dao-7.jpg","Cho thuê phòng rộng 100m2","6tr2/phòng","Nguyễn Trãi, quận Thanh Xuân, Hà Nội","Tìm người thuê trọ");
-        RoomInfo info4 = new RoomInfo("https://media-cdn.tripadvisor.com/media/photo-s/09/72/ad/99/radisson-blu-aqua-hotel.jpg","Cho thuê phòng rộng 100m2","6tr2/phòng","Nguyễn Trãi, quận Thanh Xuân, Hà Nội","0902219496");
-        RoomInfo info5 = new RoomInfo("http://proinsar.co/wp-content/uploads/2018/09/living-room-beautiful-curtains-ideas-modern-curtain-inside-awesome-for-pretty.jpg","Cho thuê phòng rộng 100m2","6tr2/phòng","Nguyễn Trãi, quận Thanh Xuân, Hà Nội","Tìm người thuê trọ");
-        roomInfos.add(info1);
-        roomInfos.add(info2);
-        roomInfos.add(info3);
-        roomInfos.add(info4);
-        roomInfos.add(info5);
-        LinearLayoutManager manager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(manager);
-        listRoomAdapter = new ListRoomAdapter(getContext(),roomInfos);
-        recyclerView.setAdapter(listRoomAdapter);*/
         if(AppUtils.isServiceOk(getActivity())){
             btnFindRoom.setOnClickListener(this);
         }
@@ -100,6 +85,7 @@ public class FragmentSearch extends FragmentCommon{
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.isSuccessful()){
+                    roomInfoList.clear();
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().string());
                         JSONArray jsonArray = jsonObject.getJSONArray("rows");

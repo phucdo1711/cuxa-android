@@ -12,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,7 +79,13 @@ public class GoogleMapFragment extends DialogFragment implements OnMapReadyCallb
             if (parent != null)
                 parent.removeView(mMainView);
         }
-        mMainView = inflater.inflate(R.layout.map_fragment, container, false);
+
+        try {
+            mMainView = inflater.inflate(R.layout.map_fragment, container, false);
+        } catch (InflateException e) {
+            /* map is already there, just return view as it is */
+        }
+
         ButterKnife.bind(getActivity());
         getLocationPermission();
         init(mMainView);

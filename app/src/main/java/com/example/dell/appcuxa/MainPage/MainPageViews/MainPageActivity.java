@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.dell.appcuxa.Login.LoginView.MainActivity;
@@ -100,7 +101,7 @@ public class MainPageActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-       /*  //Disable ViewPager Swipe
+         //Disable ViewPager Swipe
 
        viewPager.setOnTouchListener(new View.OnTouchListener()
         {
@@ -111,7 +112,6 @@ public class MainPageActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-        */
 
         setupViewPager(viewPager);
 

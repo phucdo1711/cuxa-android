@@ -15,6 +15,14 @@ public class UtilityObject {
         this.code = code;
     }
 
+    public Drawable getImage() {
+        return image;
+    }
+
+    public void setImage(Drawable image) {
+        this.image = image;
+    }
+
     public boolean isIsChecked() {
         return isChecked;
     }

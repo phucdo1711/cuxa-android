@@ -74,6 +74,15 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
         return new AddPhotoBottomDialogFragment();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},20);
+        }
+    }
+
     public interface OnChooseReasonListener {
         void onChooseReason(List<byte[]> bytes, int pos);
     }
@@ -130,6 +139,7 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
     public void intentCamera() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             if(getActivity().checkSelfPermission(Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED){
+
                 requestPermissions(new String[]{Manifest.permission.CAMERA},CAMERA);
             }else{
                 Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
@@ -314,12 +324,12 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
             Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(intent, CAMERA);
         }else if(requestCode==20 && grantResults.length>0 && grantResults[0]== PackageManager.PERMISSION_GRANTED){
-            PhotoPicker.builder()
+          /*  PhotoPicker.builder()
                     .setPhotoCount(10 - position)
                     .setShowCamera(true)
                     .setShowGif(true)
                     .setPreviewEnabled(false)
-                    .start(getActivity(), PhotoPicker.REQUEST_CODE);
+                    .start(getActivity(), PhotoPicker.REQUEST_CODE);*/
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }

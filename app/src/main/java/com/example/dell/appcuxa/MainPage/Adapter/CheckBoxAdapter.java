@@ -1,8 +1,13 @@
 package com.example.dell.appcuxa.MainPage.Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +54,7 @@ public class CheckBoxAdapter extends BaseAdapter {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View getView(final int i, View convertView, ViewGroup viewGroup) {
-        ViewHolder holder;
+        final ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = mInflater.inflate(
