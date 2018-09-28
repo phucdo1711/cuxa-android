@@ -1,14 +1,26 @@
 package com.example.dell.appcuxa.ObjectModels;
 
+import android.graphics.drawable.Drawable;
+
 public class UtilityObject {
     public String id;
     public String name;
     public String code;
+    public Drawable image;
+    public boolean isChecked;
 
     public UtilityObject(String id, String name, String code) {
         this.id = id;
         this.name = name;
         this.code = code;
+    }
+
+    public boolean isIsChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 
     public void setId(String id) {

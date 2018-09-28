@@ -14,40 +14,55 @@
         android:layout_marginEnd="@dimen/dp_16"
         android:layout_marginStart="@dimen/dp_16"
         android:gravity="center"
-        android:text="@string/bottom_sheet_option_heading"
+        android:text="Chọn giới tính"
         android:textColor="@color/black"
         android:textSize="16sp" />
 
     <com.example.dell.appcuxa.CustomeView.RobLightText
-        android:id="@+id/tvCamera"
+        android:id="@+id/tvBoth"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48"
         android:layout_marginEnd="@dimen/dp_16"
         android:layout_marginStart="@dimen/dp_16"
         android:backgroundTint="@android:color/white"
         android:drawablePadding="@dimen/dp_32"
-        android:drawableStart="@drawable/ic_photo_camera"
+        android:drawableStart="@drawable/ic_users"
         android:drawableTint="@color/black"
         android:gravity="start|center_vertical"
-        android:text="@string/bottom_sheet_option_camera"
+        android:text="Tất cả"
         android:textColor="@color/black"
         android:textSize="16sp"
-        android:drawableLeft="@drawable/ic_photo_camera" />
+        android:drawableLeft="@drawable/ic_users" />
+    <com.example.dell.appcuxa.CustomeView.RobLightText
+        android:id="@+id/tvBoy"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginStart="@dimen/dp_16"
+        android:backgroundTint="@android:color/white"
+        android:drawablePadding="@dimen/dp_32"
+        android:drawableStart="@drawable/ic_boy"
+        android:drawableTint="@color/black"
+        android:gravity="start|center_vertical"
+        android:text="Nam"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:drawableLeft="@drawable/ic_boy" />
 
     <com.example.dell.appcuxa.CustomeView.RobLightText
-        android:id="@+id/tvGallery"
+        android:id="@+id/tvGirl"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginEnd="@dimen/dp_16"
         android:layout_marginStart="@dimen/dp_16"
         android:backgroundTint="@android:color/white"
         android:drawablePadding="@dimen/dp_32"
-        android:drawableStart="@drawable/ic_picture"
+        android:drawableStart="@drawable/ic_girl"
         android:drawableTint="@color/black"
         android:gravity="start|center_vertical"
-        android:text="@string/bottom_sheet_option_gallery"
+        android:text="Nữ"
         android:textColor="@color/black"
         android:textSize="16sp"
-        android:drawableLeft="@drawable/ic_picture" />
+        android:drawableLeft="@drawable/ic_girl" />
 
 </LinearLayout>

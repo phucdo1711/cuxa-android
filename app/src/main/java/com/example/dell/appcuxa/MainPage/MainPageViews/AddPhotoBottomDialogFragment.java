@@ -1,4 +1,4 @@
-package com.example.dell.appcuxa.CustomeView;
+package com.example.dell.appcuxa.MainPage.MainPageViews;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -19,7 +19,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,16 +28,9 @@ import android.widget.Toast;
 
 import com.example.dell.appcuxa.CuxaAPI.CuXaAPI;
 import com.example.dell.appcuxa.CuxaAPI.NetworkController;
-import com.example.dell.appcuxa.Login.LoginView.MainActivity;
-import com.example.dell.appcuxa.MainPage.Adapter.ImageAdapter;
-import com.example.dell.appcuxa.MainPage.MainPageViews.FragmentUpRoom;
-import com.example.dell.appcuxa.MainPage.MainPageViews.ILogicDeleteImage;
-import com.example.dell.appcuxa.MainPage.MainPageViews.SelectedImageAdapter;
 import com.example.dell.appcuxa.ObjectModels.ImageObject;
 import com.example.dell.appcuxa.R;
 import com.example.dell.appcuxa.Utils.AppUtils;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.ipaulpro.afilechooser.utils.FileUtils;
 
 import org.json.JSONArray;
@@ -49,7 +41,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import me.iwf.photopicker.PhotoPicker;
@@ -62,16 +53,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
 public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener{
     public static final int CAMERA = 111;
-    TextView tvCamera, tvGallery, tvTrash;
+    TextView tvCamera, tvGallery;
     public int position = -1;
     List<Bitmap> lstBitmap = new ArrayList<>();
     CuXaAPI fileService;
-    String re = "";
     List<ImageObject> lstImageObject = new ArrayList<>();
 
     List<Uri> uriList = new ArrayList<>();
@@ -84,9 +73,6 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
     public static AddPhotoBottomDialogFragment newInstance() {
         return new AddPhotoBottomDialogFragment();
     }
-
-
-
 
     public interface OnChooseReasonListener {
         void onChooseReason(List<byte[]> bytes, int pos);
@@ -104,10 +90,8 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
         // get the views and attach the listener
         tvCamera = view.findViewById(R.id.tvCamera);
         tvGallery = view.findViewById(R.id.tvGallery);
-        tvTrash = view.findViewById(R.id.tvTrash);
         tvCamera.setOnClickListener(this);
         tvGallery.setOnClickListener(this);
-        tvTrash.setOnClickListener(this);
         sharedPreferences = getActivity().getSharedPreferences("login_data", MODE_PRIVATE);
         editor = sharedPreferences.edit();
         token = sharedPreferences.getString("token", "");
@@ -121,7 +105,6 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         return view;
-
     }
 
     @Override
@@ -141,23 +124,34 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
                     intentGetImage();
                 }
                 break;
-            case R.id.tvTrash:
-                break;
         }
     }
 
     public void intentCamera() {
-        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, CAMERA);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if(getActivity().checkSelfPermission(Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED){
+                requestPermissions(new String[]{Manifest.permission.CAMERA},CAMERA);
+            }else{
+                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, CAMERA);
+            }
+        }
     }
 
     public void intentGetImage() {
-        PhotoPicker.builder()
-                .setPhotoCount(10 - position)
-                .setShowCamera(true)
-                .setShowGif(true)
-                .setPreviewEnabled(false)
-                .start(getActivity(), PhotoPicker.REQUEST_CODE);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if(getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},20);
+            }else{
+                PhotoPicker.builder()
+                        .setPhotoCount(10 - position)
+                        .setShowCamera(true)
+                        .setShowGif(true)
+                        .setPreviewEnabled(false)
+                        .start(getActivity(), PhotoPicker.REQUEST_CODE);
+            }
+        }
+
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -167,9 +161,10 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
         if (data != null) {
             if (requestCode == CAMERA) {
                 Bitmap photo = (Bitmap) data.getExtras().get("data");
-                lstBitmap.add(photo);
+                Bitmap photoResized = AppUtils.getResizedBitmap(photo,500);
+                lstBitmap.add(photoResized);
                 sendBackImage(lstBitmap);
-                Uri imageUri = getImageUri(getContext(),photo);
+                Uri imageUri = getImageUri(getContext(),photoResized);
                 List<MultipartBody.Part> parts = new ArrayList<>();
 
                 parts.add(prepareFilePart("images", imageUri));
@@ -311,5 +306,21 @@ public class AddPhotoBottomDialogFragment extends BottomSheetDialogFragment impl
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode==CAMERA && grantResults.length>0 && grantResults[0]== PackageManager.PERMISSION_GRANTED){
+            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, CAMERA);
+        }else if(requestCode==20 && grantResults.length>0 && grantResults[0]== PackageManager.PERMISSION_GRANTED){
+            PhotoPicker.builder()
+                    .setPhotoCount(10 - position)
+                    .setShowCamera(true)
+                    .setShowGif(true)
+                    .setPreviewEnabled(false)
+                    .start(getActivity(), PhotoPicker.REQUEST_CODE);
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

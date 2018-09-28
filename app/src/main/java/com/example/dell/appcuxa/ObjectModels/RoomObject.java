@@ -3,6 +3,8 @@ package com.example.dell.appcuxa.ObjectModels;
 import java.io.Serializable;
 
 public class RoomObject implements Serializable {
+    public String description;
+    public String amountOfTenant;
     public String type;
     public String name;
     public String price;
@@ -13,8 +15,10 @@ public class RoomObject implements Serializable {
     public String address;
     public String[] images;
     public String area;
+    public String genderAccepted;
+    public String[] utilities;
 
-    public RoomObject(String type, String name, String price, String electricityPrice, String waterPrice, String downPayment, LocationRoom location, String address, String[] images, String area) {
+    public RoomObject(String description, String type, String name, String price, String electricityPrice, String waterPrice, String downPayment, LocationRoom location, String address, String[] images, String area,String amountOfTenant,String genderAccepted,String[] utilities) {
         this.type = type;
         this.name = name;
         this.price = price;
@@ -25,6 +29,34 @@ public class RoomObject implements Serializable {
         this.address = address;
         this.images = images;
         this.area = area;
+        this.amountOfTenant = amountOfTenant;
+        this.genderAccepted = genderAccepted;
+        this.utilities = utilities;
+        this.description = description;
+    }
+
+    public String[] getUtilities() {
+        return utilities;
+    }
+
+    public void setUtilities(String[] utilities) {
+        this.utilities = utilities;
+    }
+
+    public String getGenderAccepted() {
+        return genderAccepted;
+    }
+
+    public void setGenderAccepted(String genderAccepted) {
+        this.genderAccepted = genderAccepted;
+    }
+
+    public String getAmountOfTenant() {
+        return amountOfTenant;
+    }
+
+    public void setAmountOfTenant(String amountOfTenant) {
+        this.amountOfTenant = amountOfTenant;
     }
 
     public String getType() {
