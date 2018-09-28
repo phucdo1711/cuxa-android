@@ -31,6 +31,7 @@ public class RobEditText extends EditText {
         init();
     }
     private void init() {
+        RobEditText.this.setFocusableInTouchMode(true);
         if (!isInEditMode()) {
             Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
             setTypeface(tf);
