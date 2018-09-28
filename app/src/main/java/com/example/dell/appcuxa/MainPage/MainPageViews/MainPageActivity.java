@@ -4,13 +4,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.dell.appcuxa.Login.LoginView.MainActivity;
@@ -44,7 +48,7 @@ public class MainPageActivity extends AppCompatActivity implements View.OnClickL
         ButterKnife.bind(this);
         sharedPreferences = getSharedPreferences("login_data",MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        mBottomNav.setItemIconSize(120);
+        mBottomNav.setItemIconSize(110);
         mBottomNav.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -97,7 +101,7 @@ public class MainPageActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-       /*  //Disable ViewPager Swipe
+    /*     //Disable ViewPager Swipe
 
        viewPager.setOnTouchListener(new View.OnTouchListener()
         {
@@ -107,8 +111,7 @@ public class MainPageActivity extends AppCompatActivity implements View.OnClickL
                 return true;
             }
         });
-
-        */
+*/
 
         setupViewPager(viewPager);
 
@@ -118,10 +121,10 @@ public class MainPageActivity extends AppCompatActivity implements View.OnClickL
     protected void onStart() {
         super.onStart();
         String saveToken = sharedPreferences.getString("token","");
-        /*if(saveToken.equals("")){
+        if(saveToken.equals("")){
             Intent intent = new Intent(MainPageActivity.this, MainActivity.class);
             startActivity(intent);
-        }*/
+        }
     }
 
     @Override
@@ -166,4 +169,11 @@ public class MainPageActivity extends AppCompatActivity implements View.OnClickL
         viewPager.setAdapter(adapter);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 }
