@@ -1,34 +1,32 @@
 package com.example.dell.appcuxa.MainPage.MainPageViews;
 
-import android.app.Dialog;
-import android.location.Address;
-import android.location.Geocoder;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dell.appcuxa.CustomeView.RobButton;
+import com.example.dell.appcuxa.CuxaAPI.CuXaAPI;
+import com.example.dell.appcuxa.CuxaAPI.NetworkController;
 import com.example.dell.appcuxa.MainPage.Adapter.ListRoomAdapter;
 import com.example.dell.appcuxa.ObjectModels.RoomInfo;
 import com.example.dell.appcuxa.Utils.AppUtils;
 import com.example.dell.appcuxa.R;
 import com.example.dell.appcuxa.base.FragmentCommon;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,14 +34,24 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class FragmentSearch extends FragmentCommon{
+    List<RoomInfo> roomInfoList = new ArrayList<>();
     @BindView(R.id.recRoomList)
     public RecyclerView recyclerView;
     @BindView(R.id.lnQuickSearch)
     RobButton btnUpRoom;
+    String token = "";
+    SharedPreferences sharedPreferences;
     RobButton btnFindRoom;
+    CuXaAPI fileService;
     public LinearLayout edtQuickSearch;
     public ListRoomAdapter listRoomAdapter;
     public FragmentSearch(){
@@ -59,7 +67,10 @@ public class FragmentSearch extends FragmentCommon{
         btnUpRoom = mView.findViewById(R.id.btnUpRoom);
         btnFindRoom = mView.findViewById(R.id.btnFindRoom);
         btnUpRoom.setOnClickListener(this);
-        List<RoomInfo> roomInfos = new ArrayList<>();
+        sharedPreferences = getActivity().getSharedPreferences("login_data", MODE_PRIVATE);
+        token = sharedPreferences.getString("token", "");
+        getListTop();
+       /* List<RoomInfo> roomInfos = new ArrayList<>();
         RoomInfo info1 = new RoomInfo("https://cdn.homedit.com/wp-content/uploads/2011/05/kids-room-design3.jpg","Cho thuê phòng rộng 100m2","6tr2/phòng","Nguyễn Trãi, quận Thanh Xuân, Hà Nội","Tìm người thuê trọ");
         RoomInfo info2 = new RoomInfo("http://marceladick.com/wp-content/uploads/2016/01/beautiful-dining-rooms-awesome-with-picture-of-beautiful-dining-property-new-at-ideas.jpg","Cho thuê phòng rộng 100m2","6tr2/phòng","Nguyễn Trãi, quận Thanh Xuân, Hà Nội","Tìm người ở ghép");
         RoomInfo info3 = new RoomInfo("https://nhadepso.com/wp-content/uploads/2017/06/phong-khach-dep-den-kho-ta-nho-vao-thiet-ke-tuong-gach-doc-dao-7.jpg","Cho thuê phòng rộng 100m2","6tr2/phòng","Nguyễn Trãi, quận Thanh Xuân, Hà Nội","Tìm người thuê trọ");
@@ -73,13 +84,65 @@ public class FragmentSearch extends FragmentCommon{
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         listRoomAdapter = new ListRoomAdapter(getContext(),roomInfos);
-        recyclerView.setAdapter(listRoomAdapter);
+        recyclerView.setAdapter(listRoomAdapter);*/
         if(AppUtils.isServiceOk(getActivity())){
             btnFindRoom.setOnClickListener(this);
         }
         edtQuickSearch.setOnClickListener(this);
 
         return mView;
+    }
+
+    private void getListTop() {
+        fileService = NetworkController.upload();
+        Call<ResponseBody> getListTop = fileService.getListTop("Bearer "+ token,"application/json");
+        getListTop.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.body().string());
+                        JSONArray jsonArray = jsonObject.getJSONArray("rows");
+                        for(int i = 0;i<jsonArray.length();i++){
+                         JSONObject objectRoom = (JSONObject) jsonArray.get(i);
+                         String name = objectRoom.getString("name");
+                         String type = objectRoom.getString("type");
+                         JSONArray arrayImage = objectRoom.getJSONArray("images");
+                         List<String> stringImage = new ArrayList<>();
+                         for(int j = 0;j<arrayImage.length();j++){
+                             JSONObject objectImage = (JSONObject) arrayImage.get(j);
+                             String path = objectImage.getString("src");
+                             stringImage.add(path);
+                         }
+                         String address = objectRoom.getString("address");
+                         String price = objectRoom.getString("price");
+                         RoomInfo info = new RoomInfo();
+                         info.setAddress(address);
+                         info.setNameRoom(name);
+                         info.setPrice(price);
+                         info.setPurpose(type);
+                         info.setImage(stringImage);
+                         roomInfoList.add(info);
+                        }
+                        LinearLayoutManager manager = new LinearLayoutManager(getContext());
+                        recyclerView.setLayoutManager(manager);
+                        listRoomAdapter = new ListRoomAdapter(getContext(),roomInfoList);
+                        recyclerView.setAdapter(listRoomAdapter);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(act, "Đã có lỗi sảy ra khi lấy danh sách phòng", Toast.LENGTH_SHORT).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(act, "Đã có lỗi sảy ra khi lấy danh sách phòng", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override

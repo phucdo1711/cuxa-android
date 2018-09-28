@@ -128,6 +128,14 @@ public class FragmentUpRoom extends DialogFragment implements ILogicDeleteImage,
         mGeoDataClient = Places.getGeoDataClient(getContext(), null);
         placeAutoCompleteAdapter = new PlaceAutoCompleteAdapter(getContext(),mGeoDataClient,LAT_LNG_BOUNDS,null);
         edtAddress.setAdapter(placeAutoCompleteAdapter);
+        edtAddress.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(!hasFocus){
+                    doubleList = geoLocate();
+                }
+            }
+        });
         edtAddress.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
@@ -207,7 +215,6 @@ public class FragmentUpRoom extends DialogFragment implements ILogicDeleteImage,
                     }else{
                         genderAccepted = "female";
                     }
-
                 }
 
                 latlon = new Double[doubleList.size()];
@@ -238,9 +245,6 @@ public class FragmentUpRoom extends DialogFragment implements ILogicDeleteImage,
         String downPayment = "12343";
 
         LocationRoom locationRoom = new LocationRoom("Point",latlon);
-
-        //LocationRoom locationRoom = new LocationRoom("Point",new double[]{105.795662,20.988332});
-        //String[] images = new String[]{"5bab1c7ad17a1e4453d5675f","5bab1c7ad17a1e4453d56760","5bab1d02d17a1e4453d56762"};
         String[] images = new String[imageHinhId.size()];
         images = imageHinhId.toArray(images);
         String address = edtAddress.getText().toString();

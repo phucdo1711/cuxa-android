@@ -42,6 +42,9 @@ public interface CuXaAPI {
     @GET("utilities")
     Call<ResponseBody> getAllUtilities(@Query("sort") String sort);
 
+    @GET("rooms")
+    Call<ResponseBody> getListTop(@Header("Authorization") String authHeader,@Header("Content-Type") String content_type);
+
     @POST("rooms")
     Call<ResponseBody> uploadRoom(@Header("Authorization") String authHeader, @Body RoomObject room);
 }

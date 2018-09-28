@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import com.example.dell.appcuxa.CustomeView.RobCheckBox;
@@ -47,7 +48,7 @@ public class CheckBoxAdapter extends BaseAdapter {
     }
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public View getView(int i, View convertView, ViewGroup viewGroup) {
+    public View getView(final int i, View convertView, ViewGroup viewGroup) {
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
@@ -95,11 +96,16 @@ public class CheckBoxAdapter extends BaseAdapter {
         if(i ==11){
             holder.checkbox.setCompoundDrawablesWithIntrinsicBounds(null,null,context.getResources().getDrawable( R.drawable.ic_dog ),null);
         }
-        if(holder.checkbox.isChecked()){
-            utilityObjects.get(i).setChecked(true);
-        }else{
-            utilityObjects.get(i).setChecked(false);
-        }
+        holder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    utilityObjects.get(i).setChecked(true);
+                }else{
+                    utilityObjects.get(i).setChecked(false);
+                }
+            }
+        });
 
         return convertView;
     }

@@ -205,7 +205,7 @@ public class GoogleMapFragment extends DialogFragment implements OnMapReadyCallb
                         }
 
                     }else{
-                        Toast.makeText(getActivity(), "unable to get current location", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "onComplete: unable to get current location", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
