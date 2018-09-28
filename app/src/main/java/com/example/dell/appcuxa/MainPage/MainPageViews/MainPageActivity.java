@@ -120,11 +120,11 @@ public class MainPageActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onStart() {
         super.onStart();
-        String saveToken = sharedPreferences.getString("token","");
-        if(saveToken.equals("")){
-            Intent intent = new Intent(MainPageActivity.this, MainActivity.class);
-            startActivity(intent);
-        }
+    //        String saveToken = sharedPreferences.getString("token","");
+    //        if(saveToken.equals("")){
+    //            Intent intent = new Intent(MainPageActivity.this, MainActivity.class);
+    //            startActivity(intent);
+    //        }
     }
 
     @Override
