@@ -413,8 +413,8 @@ public class FragmentUpRoom extends DialogFragment implements ILogicDeleteImage,
         if(list.size()>0){
             Address address = list.get(0);
             Log.d("geoLocate, a location",address.toString());
-            listPos.add(address.getLatitude());
             listPos.add(address.getLongitude());
+            listPos.add(address.getLatitude());
         }
         return listPos;
     }
