@@ -38,10 +38,14 @@ public class ListRoomAdapter extends RecyclerView.Adapter<ListRoomAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         RoomInfo info = roomInfos.get(position);
-       //Picasso.get().load(info.getImage()).placeholder(R.drawable.default_image).into(holder.imgHinh);
+        if(info.getPurpose().equals("empty")){
+            holder.tvPurpose.setText("Tìm người thuê trọ");
+        }else if(info.getPurpose().equals("graft")){
+            holder.tvPurpose.setText("Tìm người ở ghép");
+        }
+        Picasso.get().load(info.getImage().get(0)).placeholder(R.drawable.default_image).into(holder.imgHinh);
         holder.tvAddress.setText(info.getAddress()==null?"":info.getAddress());
-        holder.tvPrice.setText(info.getAddress()==null?"":info.getPrice());
-        holder.tvPurpose.setText(info.getAddress()==null?"":info.getPurpose());
+        holder.tvPrice.setText(info.getAddress()==null?"":info.getPrice()+" đ");
         holder.tvName.setText(info.getAddress()==null?"":info.getNameRoom());
     }
 

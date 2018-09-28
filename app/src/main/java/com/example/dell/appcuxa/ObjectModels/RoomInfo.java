@@ -1,15 +1,19 @@
 package com.example.dell.appcuxa.ObjectModels;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class RoomInfo implements Serializable {
-    private String image;
+    private List<String> image;
     private String nameRoom;
     private String price;
     private String address;
     private String purpose;
 
-    public RoomInfo(String image, String nameRoom, String price, String address, String purpose) {
+    public RoomInfo() {
+    }
+
+    public RoomInfo(List<String> image, String nameRoom, String price, String address, String purpose) {
         this.image = image;
         this.nameRoom = nameRoom;
         this.price = price;
@@ -17,11 +21,11 @@ public class RoomInfo implements Serializable {
         this.purpose = purpose;
     }
 
-    public String getImage() {
+    public List<String> getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(List<String> image) {
         this.image = image;
     }
 
