@@ -101,7 +101,7 @@ public class MainPageActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-         //Disable ViewPager Swipe
+    /*     //Disable ViewPager Swipe
 
        viewPager.setOnTouchListener(new View.OnTouchListener()
         {
@@ -111,7 +111,7 @@ public class MainPageActivity extends AppCompatActivity implements View.OnClickL
                 return true;
             }
         });
-
+*/
 
         setupViewPager(viewPager);
 
