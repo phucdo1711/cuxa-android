@@ -198,7 +198,11 @@ public class GoogleMapFragment extends DialogFragment implements OnMapReadyCallb
                     if(task.isSuccessful()) {
                         Log.d(TAG, "onComplete: found location!");
                         Location currentLocation = (Location) task.getResult();
-                        moveCamera(new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude()),DEFAULT_ZOOM,"My location");
+                        if(currentLocation!=null){
+                            moveCamera(new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude()),DEFAULT_ZOOM,"My location");
+                        }else{
+                            Toast.makeText(getActivity(), "Chưa bật Vị trí", Toast.LENGTH_SHORT).show();
+                        }
 
                     }else{
                         Toast.makeText(getActivity(), "unable to get current location", Toast.LENGTH_SHORT).show();

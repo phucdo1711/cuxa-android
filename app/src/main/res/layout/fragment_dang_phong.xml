@@ -262,7 +262,18 @@
                 android:text="Tiện nghi"
                 android:textColor="@color/black" />
 
-            <LinearLayout
+            <com.example.dell.appcuxa.CustomeView.MyGridView
+                android:id="@+id/gridCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:clickable="false"
+                android:gravity="center"
+                android:numColumns="3"
+                android:stretchMode="columnWidth">
+            </com.example.dell.appcuxa.CustomeView.MyGridView>
+
+           <!-- <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -460,7 +471,7 @@
                     android:paddingLeft="10dp"
                     android:text="Vật nuôi"
                     android:textColor="@drawable/change_color_checkbox" />
-            </LinearLayout>
+            </LinearLayout>-->
 
             <com.example.dell.appcuxa.CustomeView.RobBoldText
                 android:layout_width="match_parent"

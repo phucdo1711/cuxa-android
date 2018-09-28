@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -17,24 +16,24 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
+import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.dell.appcuxa.CustomeView.AddPhotoBottomDialogFragment;
 import com.example.dell.appcuxa.CustomeView.MyGridView;
 import com.example.dell.appcuxa.CustomeView.RobAutoCompleteTextView;
 import com.example.dell.appcuxa.CustomeView.RobButton;
+import com.example.dell.appcuxa.CustomeView.RobCheckBox;
 import com.example.dell.appcuxa.CustomeView.RobEditText;
 import com.example.dell.appcuxa.CuxaAPI.CuXaAPI;
 import com.example.dell.appcuxa.CuxaAPI.NetworkController;
+import com.example.dell.appcuxa.MainPage.Adapter.CheckBoxAdapter;
 import com.example.dell.appcuxa.MainPage.Adapter.ImageAdapter;
 import com.example.dell.appcuxa.MainPage.Adapter.PlaceAutoCompleteAdapter;
-import com.example.dell.appcuxa.ObjectModels.ImageItem;
-import com.example.dell.appcuxa.ObjectModels.ImageObject;
+import com.example.dell.appcuxa.MainPage.MainPageViews.Interface.ILogicDeleteImage;
+import com.example.dell.appcuxa.MainPage.MainPageViews.SearchTab.GenderBottomDialog;
 import com.example.dell.appcuxa.ObjectModels.LocationRoom;
 import com.example.dell.appcuxa.ObjectModels.RoomObject;
 import com.example.dell.appcuxa.ObjectModels.UtilityObject;
@@ -44,7 +43,6 @@ import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,14 +62,11 @@ import retrofit2.Response;
 import static android.content.Context.MODE_PRIVATE;
 
 
-public class FragmentUpRoom extends DialogFragment implements ILogicDeleteImage,
+public class FragmentUpRoom extends DialogFragment implements ILogicDeleteImage, GenderBottomDialog.ICallBackGender,
         View.OnClickListener,AddPhotoBottomDialogFragment.OnChooseReasonListener ,ImageAdapter.OnRecyclerViewItemClickListener {
     public static List<byte[]> imageBytes = new ArrayList<>();
-    public List<ImageItem>  selImageList = new ArrayList<>();
-    ImageAdapter imageAdapter;
     SharedPreferences sharedPreferences;
     public static final int IMAGE_ITEM_ADD = -1;
-    List<ImageItem> imageItemList = new ArrayList<>();
     CuXaAPI fileService;
     private View mMainView;
     @BindView(R.id.btnUpRoom)
@@ -94,9 +89,13 @@ public class FragmentUpRoom extends DialogFragment implements ILogicDeleteImage,
     public RobEditText edtGender;
     @BindView(R.id.edtDesc)
     public RobEditText edtDesc;
+    public RobCheckBox cbRent;
+    public RobCheckBox cbLiveTogether;
     RobAutoCompleteTextView edtAddress;
     MyGridView gridView;
     Double[] latlon;
+    String type = "";
+    String genderAccepted = "";
     RecyclerView recyclerView;
     List<Double> doubleList = new ArrayList<>();
     public static ArrayList<String> imageHinhId = new ArrayList<>();
@@ -107,6 +106,7 @@ public class FragmentUpRoom extends DialogFragment implements ILogicDeleteImage,
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(-40,-168),new LatLng(71,136));
     SelectedImageAdapter selectedImageAdapter;
     PlaceAutoCompleteAdapter placeAutoCompleteAdapter;
+    MyGridView gvCheckBox;
     public FragmentUpRoom() {
 
     }
@@ -114,7 +114,6 @@ public class FragmentUpRoom extends DialogFragment implements ILogicDeleteImage,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Nullable
@@ -143,6 +142,7 @@ public class FragmentUpRoom extends DialogFragment implements ILogicDeleteImage,
                 return false;
             }
         });
+
         getAllUtilities();
         if(utilityObjectList!=null){
             int a = utilityObjectList.size();
@@ -164,6 +164,12 @@ public class FragmentUpRoom extends DialogFragment implements ILogicDeleteImage,
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
+            case R.id.edtGender:
+                GenderBottomDialog genderBottomDialog = new GenderBottomDialog();
+                genderBottomDialog.setOnChooseGenderListener(this);
+                genderBottomDialog.show(getActivity().getSupportFragmentManager(),
+                        "get_gender_dialog");
+                break;
             case R.id.imgBack:
                 FragmentUpRoom.this.dismiss();
                 break;
@@ -182,6 +188,27 @@ public class FragmentUpRoom extends DialogFragment implements ILogicDeleteImage,
                 if(edtDienTich.getText().toString().trim().equals("")){
                     Toast.makeText(getActivity(), "Bạn chưa nhập diện tích phòng", Toast.LENGTH_SHORT).show();
                 }
+                if(!cbLiveTogether.isChecked()&&!cbRent.isChecked()){
+                    Toast.makeText(getActivity(), "Bạn chưa chọn mục đích", Toast.LENGTH_SHORT).show();
+                    return;
+                }else if(cbRent.isChecked()){
+                    type = "empty";
+                }else{
+                    type = "graft";
+                }
+                if(edtGender.getText().toString().trim().equals("")){
+                    Toast.makeText(getActivity(), "Bạn chưa chọn giới tính", Toast.LENGTH_SHORT).show();
+                }else{
+                    String gender = edtGender.getText().toString();
+                    if(gender.equals("Tất cả")){
+                        genderAccepted = "both";
+                    }else if(gender.equals("Nam")){
+                        genderAccepted = "male";
+                    }else{
+                        genderAccepted = "female";
+                    }
+
+                }
 
                 latlon = new Double[doubleList.size()];
                 latlon = doubleList.toArray(latlon);
@@ -195,9 +222,16 @@ public class FragmentUpRoom extends DialogFragment implements ILogicDeleteImage,
     }
 
     private void uploadRoom() {
-
+        List<String> utilis = new ArrayList<>();
+        for(int i = 0; i<utilityObjectList.size();i++){
+            if(utilityObjectList.get(i).isIsChecked()){
+                utilis.add(utilityObjectList.get(i).getId());
+            }
+        }
+        String[] utiArray = new String[utilis.size()];
+        utiArray = utilis.toArray(utiArray);
         String roomName = edtRoomName.getText().toString();
-        String type = "empty";
+
         String price = edtPrice.getText().toString();
         String electricPrice = "120000";
         String wterPrice = "12345";
@@ -210,8 +244,10 @@ public class FragmentUpRoom extends DialogFragment implements ILogicDeleteImage,
         String[] images = new String[imageHinhId.size()];
         images = imageHinhId.toArray(images);
         String address = edtAddress.getText().toString();
+        String desc = edtDesc.getText().toString();
         String area = edtDienTich.getText().toString();
-        RoomObject roomObject = new RoomObject(type,roomName,price,electricPrice,wterPrice,downPayment,locationRoom,address,images,area);
+        String amountOfTenant = edtNumOfPeople.getText().toString();
+        RoomObject roomObject = new RoomObject(desc,type,roomName,price,electricPrice,wterPrice,downPayment,locationRoom,address,images,area,amountOfTenant,genderAccepted,utiArray);
         Call<ResponseBody> call = fileService.uploadRoom("Bearer " + token,roomObject);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -232,6 +268,11 @@ public class FragmentUpRoom extends DialogFragment implements ILogicDeleteImage,
 
 
     public void init() {
+        edtDesc = mMainView.findViewById(R.id.edtDesc);
+        edtNumOfPeople = mMainView.findViewById(R.id.edtNumOfPpl);
+        gvCheckBox = mMainView.findViewById(R.id.gridCheckBox);
+        cbRent = mMainView.findViewById(R.id.cbRent);
+        cbLiveTogether = mMainView.findViewById(R.id.cbLiveTogether);
         edtAddress = mMainView.findViewById(R.id.edtSearch);
         btnUpload = mMainView.findViewById(R.id.btnUpload);
         btnUpload.setOnClickListener(this);
@@ -245,6 +286,25 @@ public class FragmentUpRoom extends DialogFragment implements ILogicDeleteImage,
         btnSelectImage.setOnClickListener(this);
         recyclerView = mMainView.findViewById(R.id.recyclerView);
         edtAddress.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        edtGender = mMainView.findViewById(R.id.edtGender);
+        edtGender.setOnClickListener(this);
+        edtGender.setText("Tất cả");
+        cbRent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    cbLiveTogether.setChecked(false);
+                }
+            }
+        });
+        cbLiveTogether.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    cbRent.setChecked(false);
+                }
+            }
+        });
     }
 
     public void showBottomDialog(int pos) {
@@ -269,25 +329,6 @@ public class FragmentUpRoom extends DialogFragment implements ILogicDeleteImage,
         imageBytes.addAll(listByte);
         selectedImageAdapter = new SelectedImageAdapter(imageBytes,getContext(),this);
         gridView.setAdapter(selectedImageAdapter);
-
-
-
-       /* selectedImageAdapter.notifyDataSetChanged();
-        if(imageBytes.size()>=10){
-            btnSelectImage.setEnabled(false);
-        }else{
-            btnSelectImage.setEnabled(true);
-        }*/
-       /* for (int i = 0;i<listByte.size();i++){
-            ImageItem imageItem = new ImageItem();
-            imageItem.setUri(listByte.get(pos));
-            imageItemList.add(imageItem);
-        }*/
-       /* ImageAdapter imageAdapter = new ImageAdapter(imageItemList,getContext());
-        recyclerView.setAdapter(imageAdapter);
-        imageAdapter.setOnItemClickListener(this);
-        imageAdapter.setImages(imageItemList);
-        imageAdapter.notifyDataSetChanged();*/
         selectedImageAdapter.notifyDataSetChanged();
 
     }
@@ -335,8 +376,11 @@ public class FragmentUpRoom extends DialogFragment implements ILogicDeleteImage,
                             UtilityObject utilityObject =
                                     new UtilityObject(object.getString("id"),object.getString("name"),object.getString("code"));
                             utilityObjectList.add(utilityObject);
-
                         }
+                        CheckBoxAdapter checkBoxAdapter = new CheckBoxAdapter(utilityObjectList,getContext());
+                        gvCheckBox.setAdapter(checkBoxAdapter);
+                        checkBoxAdapter.notifyDataSetChanged();
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
@@ -369,6 +413,18 @@ public class FragmentUpRoom extends DialogFragment implements ILogicDeleteImage,
             listPos.add(address.getLongitude());
         }
         return listPos;
+    }
+    @Override
+    public void onActivityCreated(Bundle arg0) {
+        super.onActivityCreated(arg0);
+
+        getDialog().getWindow().getAttributes().windowAnimations = R.style.main_menu_animstyle;
+    }
+
+    @Override
+    public String getGender(String gender) {
+        edtGender.setText(gender);
+        return gender;
     }
 }
 
