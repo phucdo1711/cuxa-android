@@ -4,31 +4,229 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <!--<android.support.design.widget.AppBarLayout
+    <!--<android.support.design.widget.AppBarLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:background="@color/white"-->
+        <!--android:layout_height="?attr/actionBarSize"-->
+        <!--android:theme="@style/AppTheme.AppBarOverlay">-->
+
+        <!--<android.support.v7.widget.Toolbar-->
+            <!--android:id="@+id/toolbarUpdateProfile"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="?attr/actionBarSize"-->
+            <!--android:background="#000000"-->
+            <!--app:popupTheme="@style/AppTheme.PopupOverlay"-->
+            <!--app:title="Update Information" >-->
+            <!--<android.support.v7.widget.SearchView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:background="#ffffff"-->
+                <!--android:layout_height="50dp">-->
+
+            <!--</android.support.v7.widget.SearchView>-->
+        <!--</android.support.v7.widget.Toolbar>-->
+
+
+    <!--</android.support.design.widget.AppBarLayout>-->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/black"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="56dp"
+        android:elevation="4dp"
+        android:gravity="center">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbarUpdateProfile"
+        <!--<ImageView-->
+            <!--android:id="@+id/imgBack"-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:background="@drawable/ripple_item"-->
+            <!--android:src="@drawable/ic_back" />-->
+
+        <com.example.dell.appcuxa.CustomeView.RobBoldText
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#000000"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="Update Information" >
-            <android.support.v7.widget.SearchView
+            android:layout_height="56dp"
+            android:gravity="center"
+            android:text="Profile"
+            android:textColor="@color/black"/>
+    </RelativeLayout>
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:background="#ffffff"
-                android:layout_height="50dp">
+                android:layout_height="140dp"
+                android:paddingHorizontal="25dp"
+                android:weightSum="10"
+                android:background="@drawable/background_border">
 
-            </android.support.v7.widget.SearchView>
-        </android.support.v7.widget.Toolbar>
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="3.5"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_default_user" />
 
+                <RelativeLayout
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
 
-    </android.support.design.widget.AppBarLayout>-->
-    <TextView
-        android:text="profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+                    <com.example.dell.appcuxa.CustomeView.RobBoldText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nguyễn Văn A"
+                        android:textColor="@color/black"/>
+
+                    <com.example.dell.appcuxa.CustomeView.RobLightText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Sống tại Hà Nội, Việt Nam" />
+
+                    <com.example.dell.appcuxa.CustomeView.RobLightText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="40dp"
+                        android:text="Đang học tại Đại học Hà Nội" />
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="1.5"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_edit" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:background="@drawable/background_border"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:paddingHorizontal="25dp">
+
+                <com.example.dell.appcuxa.CustomeView.RobBoldText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Phòng của bạn"
+                    android:textColor="@color/black"
+                    android:drawableRight="@drawable/ic_home"/>
+            </LinearLayout>
+            <LinearLayout
+                android:background="@drawable/background_border"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:paddingHorizontal="25dp">
+
+                <com.example.dell.appcuxa.CustomeView.RobBoldText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@color/black"
+                    android:text="Phiếu giảm giá/ Coupon"
+                    android:drawableRight="@drawable/ic_coupon"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:background="@drawable/background_border"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:paddingHorizontal="25dp">
+
+                <com.example.dell.appcuxa.CustomeView.RobBoldText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Mời bạn bè"
+                    android:textColor="@color/black"
+                    android:drawableRight="@drawable/ic_gift"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:background="@drawable/background_border"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:paddingHorizontal="25dp">
+
+                <com.example.dell.appcuxa.CustomeView.RobBoldText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Quét QR Code"
+                    android:textColor="@color/black"
+                    android:drawableRight="@drawable/ic_qr_code"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:background="@drawable/background_border"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:paddingHorizontal="25dp">
+
+                <com.example.dell.appcuxa.CustomeView.RobBoldText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@color/black"
+                    android:text="Cài đặt"
+                    android:drawableRight="@drawable/ic_settings"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:background="@drawable/background_border"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:paddingHorizontal="25dp">
+
+                <com.example.dell.appcuxa.CustomeView.RobBoldText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Cần trợ giúp"
+                    android:textColor="@color/black"
+                    android:drawableRight="@drawable/ic_questions_circular_button" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:background="@drawable/background_border"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:paddingHorizontal="25dp">
+
+                <com.example.dell.appcuxa.CustomeView.RobBoldText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@color/black"
+                    android:text="Feedback"
+                    android:drawableRight="@drawable/ic_feedback"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:background="@drawable/background_border"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:paddingHorizontal="25dp">
+
+                <com.example.dell.appcuxa.CustomeView.RobBoldText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Đăng xuất"
+                    android:textColor="@color/black"
+                    android:drawableRight="@drawable/ic_exit"/>
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
 </LinearLayout>
